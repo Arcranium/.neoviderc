@@ -434,7 +434,9 @@ vim.keymap.set("n", "<A-CR>", function() -- Documentation
     end
 end, { expr = true })
 
+vim.keymap.set("n", "<leader>rn", "<Plug>(coc-rename)", { silent = true, nowait = true })
 vim.keymap.set("n", "<leader>ac", "<Plug>(coc-codeaction-cursor)", { silent = true, nowait = true })
+vim.keymap.set("n", "<leader>as", "<Plug>(coc-codeaction-source)", { silent = true, nowait = true })
 vim.keymap.set("n", "<C-]>", "<Plug>(coc-definition)", { silent = true, nowait = true })
 
 -- Configure Fullscreen custom command
