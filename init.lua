@@ -27,6 +27,36 @@ vim.g.suda_smart_edit = 1
 
 require("lazy").setup({
     {
+	"Pocco81/auto-save.nvim",
+	event = "VeryLazy",
+	config = function()
+	    require("auto-save").setup {
+		enabled = true,
+	    }
+	end,
+    },
+    {
+      "nvimtools/none-ls.nvim",
+      event = "VeryLazy",
+      opts = function()
+	  -- return require "custom.configs.null-ls"
+	  return {}
+      end,
+    },
+    {
+      "windwp/nvim-ts-autotag",
+      ft = {
+	"javascript",
+	"typescript",
+	"javascriptreact",
+	"typescriptreact",
+	"html",
+      },
+      config = function()
+	require("nvim-ts-autotag").setup()
+      end,
+    },
+    {
 	"voldikss/vim-floaterm",
 	lazy = false,
 	keys = {
@@ -36,7 +66,34 @@ require("lazy").setup({
 	}
     },
 
-    "jose-elias-alvarez/null-ls.nvim",
+	--    {
+	-- "jose-elias-alvarez/null-ls.nvim",
+	-- opts = {
+	--   sources = {
+	--     null_ls.builtins.diagnostics.eslint,
+	--     null_ls.builtins.formatting.prettier,
+	--     null_ls.builtins.diagnostics.codespell,
+	--     null_ls.builtins.completion.spell,
+	--     null_ls.builtins.formatting.stylua,
+	--   },
+	--   on_attach = function(client, bufnr)
+	--     if client.supports_method "textDocument/formatting" then
+	--       vim.api.nvim_clear_autocmds {
+	-- 	group = augroup,
+	-- 	buffer = bufnr,
+	--       }
+	--       vim.api.nvim_create_autocmd("BufWritePre", {
+	-- 	group = augroup,
+	-- 	buffer = bufnr,
+	-- 	callback = function()
+	-- 	  vim.lsp.buf.format { bufnr = bufnr }
+	-- 	end,
+	--       })
+	--     end
+	--   end,
+	-- }
+	--    },
+    
     "MunifTanjim/prettier.nvim",
 
     "stevearc/dressing.nvim",
@@ -62,7 +119,21 @@ require("lazy").setup({
       }
     },
 
-    "nvim-treesitter/nvim-treesitter",
+    { 
+	"nvim-treesitter/nvim-treesitter",
+	opts = function()
+	    -- opts = require "plugins.config.treesitter"
+	    return {
+		ensure_installed = {
+		    "lua",
+		    "javascript",
+		    "typescript",
+		    "tsx",
+		    "css"
+		},
+	    }
+	end,
+    },
 
     { "bluz71/vim-nightfly-colors", name = "nightfly", lazy = false, priority = 1000 },
 
@@ -85,7 +156,20 @@ require("lazy").setup({
       end,
     },
 
-    { "williamboman/mason.nvim" },
+    { 
+	"williamboman/mason.nvim",
+	opts = {
+	    ensure_installed = {
+		"typescript-language-server",
+		"tailwindcss-language-server",
+		"eslint-lsp",
+		"prettier",
+		"js-debug-adapter",
+		"stylua",
+		"codespell",
+	    }
+	}
+    },
     "neovim/nvim-lspconfig",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
@@ -406,6 +490,8 @@ vim.keymap.set("n", "<a-cr>", function()
     vim.lsp.buf.code_action()
     -- hover.hover()
 end, {})
+
+vim.keymap.set("n", "<leader>f", "<Plug>(prettier-format)")
 
 -- Configure hover keymap
 vim.keymap.set("n", "<C-p>", function()
